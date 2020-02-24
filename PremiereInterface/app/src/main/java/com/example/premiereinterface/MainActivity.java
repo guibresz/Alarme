@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, PERMISSION_SEND_SMS); //autorisation d'envoie de sms
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, 1); //autorisation reception de sms
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_SMS}, 1); //autorisation reception de sms
 
 
 

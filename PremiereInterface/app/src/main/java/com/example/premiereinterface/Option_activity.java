@@ -89,6 +89,7 @@ public class Option_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
                 EffacerFichier();
             }
         });
