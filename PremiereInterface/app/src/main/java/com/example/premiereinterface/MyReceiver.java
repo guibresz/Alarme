@@ -10,6 +10,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 
+
+
 public class MyReceiver extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";

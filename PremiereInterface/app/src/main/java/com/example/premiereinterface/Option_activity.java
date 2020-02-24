@@ -46,6 +46,8 @@ public class Option_activity extends AppCompatActivity {
 
     String fichier = "liste_a_contacter.txt";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

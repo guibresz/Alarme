@@ -1,9 +1,9 @@
 package com.example.premiereinterface;
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.telephony.SmsManager;
 
 import androidx.appcompat.app.AlertDialog;
@@ -17,29 +17,40 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import static android.Manifest.permission.SEND_SMS;
-import static android.R.color.black;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button bouton_intrusion = null;
-    Button bouton_incendie = null;
-    Button bouton_confinement = null;
-    Button bouton_option = null;
+    Button bouton_intrusion =  null;
+    Button bouton_incendie =  null;
+    Button bouton_confinement =  null;
+    Button bouton_option =  null;
+
+    TabHost th = null;
 
     String fichier = "liste_a_contacter.txt";
 
     View view = null;
     View bouton_appuye = null;
 
+    CSMS envoieDeSms;
+
     private static final int PERMISSION_SEND_SMS = 123;
+
+
+    private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, intent.getExtras().getString("message"), Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +67,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_SMS}, 1); //autorisation reception de sms
 
 
+         bouton_intrusion =  findViewById(R.id.button_intrusion);
+         bouton_incendie = findViewById(R.id.button_incendie);
+         bouton_confinement = findViewById(R.id.button_confinement);
+         bouton_option = findViewById(R.id.button_configuration);
 
-        bouton_intrusion = findViewById(R.id.button_intrusion);
-        bouton_incendie = findViewById(R.id.button_incendie);
-        bouton_confinement = findViewById(R.id.button_confinement);
-        bouton_option = findViewById(R.id.button_configuration);
+        envoieDeSms = new CSMS();
+
+
+        th = findViewById(R.id.TabHost);
+
+
+        th.setup();
+
+        TabHost.TabSpec specs = th.newTabSpec("Tag1");
+        specs.setContent(R.id.declenchement);
+        specs.setIndicator("Declenchement");
+        th.addTab(specs);
+
+        specs = th.newTabSpec("Tag2");
+        specs.setContent(R.id.Test);
+        specs.setIndicator("Test");
+        th.addTab(specs);
+
+        specs = th.newTabSpec("Tag3");
+        specs.setContent(R.id.Archive);
+        specs.setIndicator("Archive");
+        th.addTab(specs);
+
+
 
 
         bouton_intrusion.setOnClickListener(this);
@@ -101,19 +136,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case R.id.button_intrusion:
                         view.setBackgroundColor(Color.RED);
                         LireNumeroAContacter("Alerte intrusion");
-                        //EnvoieSMS("0652770323", "Alerte intrusion" );
+
                         break;
 
                     case R.id.button_incendie:
                         view.setBackgroundColor(Color.BLUE);
                         LireNumeroAContacter("Alerte incendie");
-                        //EnvoieSMS("0652770323", "Alerte incendie" );
+
                         break;
 
                     case R.id.button_confinement:
                         view.setBackgroundColor(Color.GREEN);
                         LireNumeroAContacter("Alerte confinement");
-                        //EnvoieSMS("0652770323", "Alerte confinement" );
+
                         break;
 
 
@@ -139,12 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void EnvoieSMS(String Numero, String Message){
 
-        SmsManager smsmanager = SmsManager.getDefault();
-        smsmanager.sendTextMessage(Numero,null, Message, null, null);
-
-    }
 
     public void LireNumeroAContacter(String Message){
         try {
@@ -163,7 +193,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 data_formatee = s.split(" "); // sépare le batiment du numero
 
-                EnvoieSMS( data_formatee[1] ,Message); //envoie un message aux numero dans la liste
+                envoieDeSms.EnvoieSMS( data_formatee[1] ,Message);
+
 
             }
 
