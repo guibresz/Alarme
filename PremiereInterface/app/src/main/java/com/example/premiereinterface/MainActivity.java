@@ -185,6 +185,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void LireNumeroAContacter(String Message){
         try {
 
+            CFichier file = new CFichier(getApplicationContext(), "Archive.txt");
+
             String[] data_formatee = new String[2];
 
             // Open stream to read file.
@@ -201,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 envoieDeSms.EnvoieSMS( data_formatee[1] ,Message);
 
+                file.sauvegarder(Message + " envoyé à " + data_formatee[0] + " au numéro " + data_formatee[1]);
 
             }
 

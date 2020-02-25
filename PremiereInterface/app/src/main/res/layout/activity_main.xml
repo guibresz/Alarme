@@ -90,6 +90,31 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <CalendarView
+                        android:id="@+id/calendarView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/editText2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="time" />
+
+                        <Button
+                            android:id="@+id/button_valider_test"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Valider Test" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -100,14 +125,27 @@
                     android:background="@android:color/black"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView_Archive"
-                        style="@android:style/Theme.Black"
+                    <ScrollView
+                        android:onClick="lecture_archive"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Archive"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp" />
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/textView_Archive"
+                                style="@android:style/Theme.Black"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:onClick="lecture_archive"
+                                android:text="Appuyer pour voir les archives"
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </ScrollView>
 
                 </LinearLayout>
             </FrameLayout>
