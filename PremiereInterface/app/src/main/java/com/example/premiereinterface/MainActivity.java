@@ -18,11 +18,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,11 +65,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
+        ///DEMANDE LES AUTORISATION//
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, PERMISSION_SEND_SMS); //autorisation d'envoie de sms
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, 1); //autorisation reception de sms
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_SMS}, 1); //autorisation reception de sms
 
 
+        //RECUPERE LES BOUTTONS//
          bouton_intrusion =  findViewById(R.id.button_intrusion);
          bouton_incendie = findViewById(R.id.button_incendie);
          bouton_confinement = findViewById(R.id.button_confinement);
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         th = findViewById(R.id.TabHost);
 
 
+        //ajoute la tab//
         th.setup();
 
         TabHost.TabSpec specs = th.newTabSpec("Tag1");
@@ -97,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-
+        //AJOUTE DES EVENEMENT SUR LES BOUTONS//
         bouton_intrusion.setOnClickListener(this);
         bouton_incendie.setOnClickListener(this);
         bouton_confinement.setOnClickListener(this);
@@ -134,19 +140,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch(bouton_appuye.getId())
                 {
                     case R.id.button_intrusion:
-                        view.setBackgroundColor(Color.RED);
+                      //  view.setBackgroundColor(Color.RED);
                         LireNumeroAContacter("Alerte intrusion");
 
                         break;
 
                     case R.id.button_incendie:
-                        view.setBackgroundColor(Color.BLUE);
+                       // view.setBackgroundColor(Color.BLUE);
                         LireNumeroAContacter("Alerte incendie");
 
                         break;
 
                     case R.id.button_confinement:
-                        view.setBackgroundColor(Color.GREEN);
+                        //view.setBackgroundColor(Color.GREEN);
                         LireNumeroAContacter("Alerte confinement");
 
                         break;
@@ -206,5 +212,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+    }
+
+
+    public void test_fichier(View v) throws IOException {
+
+        CFichier classFichier = new CFichier();
+
+
+        classFichier.sauvegarder(getApplicationContext(),"Archive.txt", "Hey");
+
+
+    }
+
+    public void test_lecture(View v) throws IOException {
+
+        CFichier classFichier = new CFichier();
+
+        TextView text_archive =  findViewById(R.id.textView_Archive);
+
+        text_archive.setText(classFichier.LireFichier(getApplicationContext() ,"Archive.txt"));
+
+
+    }
+
+    public void test_suppression(View v) throws IOException {
+        CFichier classFichier = new CFichier();
+        classFichier.EffacerFichier(getApplicationContext(),"Archive.txt");
     }
 }
