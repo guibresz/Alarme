@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 envoieDeSms.EnvoieSMS( data_formatee[1] ,Message);
 
-                file.sauvegarder(Message + " envoyé à " + data_formatee[0] + " au numéro " + data_formatee[1]);
+                file.sauvegarderDeclenchement(Message, data_formatee[0], data_formatee[1]);
 
             }
 

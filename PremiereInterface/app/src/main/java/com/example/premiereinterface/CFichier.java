@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Calendar;
 
 
 public class CFichier {
@@ -33,6 +34,19 @@ public class CFichier {
 
 
     }
+
+    public void sauvegarderDeclenchement(String Message, String NomDest, String NumeroDest) throws IOException {
+
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fichier, Context.MODE_APPEND));
+        outputStreamWriter.write("\n");
+        outputStreamWriter.write(Message + " envoyé à " + NomDest + " au numéro " + NumeroDest + " le " +  Calendar.getInstance().getTime().toString() );
+        outputStreamWriter.close();
+
+
+
+    }
+
+
 
     public String LireFichier() throws IOException {
 
