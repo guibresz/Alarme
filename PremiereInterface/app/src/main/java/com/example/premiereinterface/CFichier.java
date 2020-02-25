@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class CFichier {
@@ -37,9 +39,22 @@ public class CFichier {
 
     public void sauvegarderDeclenchement(String Message, String NomDest, String NumeroDest) throws IOException {
 
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(c);
+
+        Calendar calendar = Calendar.getInstance();
+        int hour24hrs = calendar.get(Calendar.HOUR_OF_DAY);
+        int hour12hrs = calendar.get(Calendar.HOUR);
+        int minutes = calendar.get(Calendar.MINUTE);
+        int seconds = calendar.get(Calendar.SECOND);
+
+        String Clock = hour24hrs + ":" +  minutes + ":" + seconds;
+
+
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fichier, Context.MODE_APPEND));
         outputStreamWriter.write("\n");
-        outputStreamWriter.write(Message + " envoyé à " + NomDest + " au numéro " + NumeroDest + " le " +  Calendar.getInstance().getTime().toString() );
+        outputStreamWriter.write(Message + " envoyé à " + NomDest + " au numéro " + NumeroDest + " le " + formattedDate + " à " + Clock  );
         outputStreamWriter.close();
 
 
