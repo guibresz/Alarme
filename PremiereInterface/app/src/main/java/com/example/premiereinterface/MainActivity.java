@@ -217,27 +217,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void test_fichier(View v) throws IOException {
 
-        CFichier classFichier = new CFichier();
+        CFichier classFichier = new CFichier(getApplicationContext(),"Archive.txt");
 
 
-        classFichier.sauvegarder(getApplicationContext(),"Archive.txt", "Hey");
+        classFichier.sauvegarder("Hey");
 
 
     }
 
     public void test_lecture(View v) throws IOException {
 
-        CFichier classFichier = new CFichier();
+        CFichier classFichier = new CFichier(getApplicationContext(),"Archive.txt");
 
         TextView text_archive =  findViewById(R.id.textView_Archive);
 
-        text_archive.setText(classFichier.LireFichier(getApplicationContext() ,"Archive.txt"));
+        text_archive.setText(classFichier.LireFichier());
 
 
     }
 
     public void test_suppression(View v) throws IOException {
-        CFichier classFichier = new CFichier();
-        classFichier.EffacerFichier(getApplicationContext(),"Archive.txt");
+        CFichier classFichier = new CFichier(getApplicationContext(),"Archive.txt");
+        classFichier.EffacerFichier();
     }
 }

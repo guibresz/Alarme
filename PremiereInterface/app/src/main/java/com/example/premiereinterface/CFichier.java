@@ -11,13 +11,19 @@ import java.io.OutputStreamWriter;
 public class CFichier {
 
 
-    public CFichier(){
+    private Context context = null;
+    private String fichier = null;
+
+    public CFichier(Context pcontext,String pfichier){
+
+        context = pcontext;
+        fichier = pfichier;
 
     }
 
 
 
-    public void sauvegarder(Context context,String fichier,String data) throws IOException {
+    public void sauvegarder(String data) throws IOException {
 
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fichier, Context.MODE_APPEND));
         outputStreamWriter.write("\n");
@@ -28,7 +34,7 @@ public class CFichier {
 
     }
 
-    public String LireFichier(Context context,String fichier) throws IOException {
+    public String LireFichier() throws IOException {
 
             FileInputStream in = null;
 
@@ -46,7 +52,7 @@ public class CFichier {
 
     }
 
-    public void EffacerFichier(Context context,String fichier) throws IOException {
+    public void EffacerFichier() throws IOException {
 
 
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fichier, Context.MODE_PRIVATE));
