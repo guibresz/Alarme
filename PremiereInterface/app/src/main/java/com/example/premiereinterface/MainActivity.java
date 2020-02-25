@@ -215,17 +215,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void test_fichier(View v) throws IOException {
-
-        CFichier classFichier = new CFichier(getApplicationContext(),"Archive.txt");
 
 
-        classFichier.sauvegarder("Hey");
-
-
-    }
-
-    public void test_lecture(View v) throws IOException {
+    public void lecture_archive(View v) throws IOException {
 
         CFichier classFichier = new CFichier(getApplicationContext(),"Archive.txt");
 
@@ -236,8 +228,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void test_suppression(View v) throws IOException {
-        CFichier classFichier = new CFichier(getApplicationContext(),"Archive.txt");
-        classFichier.EffacerFichier();
-    }
 }

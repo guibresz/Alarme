@@ -94,6 +94,7 @@
 
                 <LinearLayout
                     android:id="@+id/Archive"
+                    android:onClick="lecture_archive"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/black"
@@ -108,27 +109,6 @@
                         android:textColor="@android:color/white"
                         android:textSize="14sp" />
 
-                    <Button
-                        android:id="@+id/button_test_fichier"
-                        android:onClick="test_fichier"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Ajouter du texte"
-                        android:textColor="@android:color/black" />
-
-                    <Button
-                        android:id="@+id/button_lire_fichier"
-                        android:onClick="test_lecture"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Lire" />
-
-                    <Button
-                        android:id="@+id/button_supprimer_fichier"
-                        android:layout_width="match_parent"
-                        android:onClick="test_suppression"
-                        android:layout_height="wrap_content"
-                        android:text="Supprimer fichier" />
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
