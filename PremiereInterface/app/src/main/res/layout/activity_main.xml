@@ -39,8 +39,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="50dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingTop="50dp">
 
                         <Button
                             android:id="@+id/button_intrusion"
@@ -78,7 +78,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
-                            android:layout_marginTop="66dp"
+                            android:layout_marginTop="40dp"
                             android:text="Option" />
                     </RelativeLayout>
 
@@ -90,30 +90,32 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <CalendarView
-                        android:id="@+id/calendarView"
+                    <Button
+                        android:id="@+id/button_choix_date"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="choix_heure_et_date"
+                        android:text="Choisir date" />
 
-                    <LinearLayout
+                    <Button
+                        android:id="@+id/button_choix_heure"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:onClick="choix_heure_et_date"
+                        android:text="Choisir heure" />
 
-                        <EditText
-                            android:id="@+id/editText2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:inputType="time" />
-
-                        <Button
-                            android:id="@+id/button_valider_test"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Valider Test" />
-                    </LinearLayout>
+                    <Button
+                        android:id="@+id/button_valider_test"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:onClick="test_valider"
+                        android:text="Valider Test" />
 
                 </LinearLayout>
 
@@ -132,6 +134,7 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
+                            android:onClick="lecture_archive"
                             android:layout_height="wrap_content"
                             android:orientation="vertical" >
 
@@ -148,6 +151,13 @@
                     </ScrollView>
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Etat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"/>
+
             </FrameLayout>
         </LinearLayout>
     </TabHost>

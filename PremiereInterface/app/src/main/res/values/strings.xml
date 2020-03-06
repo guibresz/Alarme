@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Alarme</string>
+
+    <string-array name="materiel">
+        <item></item>
+        <item>Ecole</item>
+        <item>Raspberry</item>
+        <item>Mairie</item>
+    </string-array>
+
 </resources>

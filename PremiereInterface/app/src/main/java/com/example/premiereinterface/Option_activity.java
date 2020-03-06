@@ -15,6 +15,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -37,7 +39,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Parameter;
 
-public class Option_activity extends AppCompatActivity {
+public class Option_activity extends AppCompatActivity  implements AdapterView.OnItemSelectedListener {
 
     TableLayout tableau = null;
     TableRow ligne = null;
@@ -46,6 +48,10 @@ public class Option_activity extends AppCompatActivity {
     Button bouton_effacer = null;
 
     String fichier = "liste_a_contacter.txt";
+
+    Spinner batiment = null;
+
+    String batimentText = null;
 
 
 
@@ -66,20 +72,26 @@ public class Option_activity extends AppCompatActivity {
 
 
 
-
-
         LireFichier();
 
         bouton_valider = findViewById(R.id.button_ajout);
+
+        batiment = findViewById(R.id.Spinner_batiment);
+        ArrayAdapter<CharSequence> adapter  = ArrayAdapter.createFromResource(this, R.array.materiel, R.layout.support_simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        batiment.setAdapter(adapter);
+        batiment.setOnItemSelectedListener(this);
+
+
         bouton_valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                EditText batiment = findViewById(R.id.editText_batiment);
+
                 EditText numero = findViewById(R.id.editText_numero);
 
 
-                if( (batiment.getText().length() != 0) && (numero.getText().length() != 0) ){
+                if( (batimentText.length() != 0) && (numero.getText().length() != 0) ){
                     NouvelleLigne();
                 }
 
@@ -142,12 +154,10 @@ public class Option_activity extends AppCompatActivity {
 
     }
 
-
-
     public void NouvelleLigne(){
         Toast toast;
 
-        EditText batiment = findViewById(R.id.editText_batiment);
+        //EditText batiment = findViewById(R.id.editText_batiment);
         EditText numero = findViewById(R.id.editText_numero);
 
         tableau = findViewById(R.id.Tableau);
@@ -157,7 +167,7 @@ public class Option_activity extends AppCompatActivity {
 
 
         TextView texte1 = new TextView(getApplicationContext());
-        texte1.setText(batiment.getText());
+        texte1.setText(batimentText);
         texte1.setGravity(Gravity.CENTER);
         texte1.setLayoutParams(findViewById(R.id.texte_batiment).getLayoutParams());
 
@@ -174,9 +184,8 @@ public class Option_activity extends AppCompatActivity {
 
 
         try {
-            sauvegarder(batiment.getText().toString(), numero.getText().toString());
+            sauvegarder(batimentText, numero.getText().toString());
             numero.setText("");
-            batiment.setText("");
             Toast.makeText(getApplicationContext(), "Ajouté!", Toast.LENGTH_SHORT).show();
 
 
@@ -194,7 +203,7 @@ public class Option_activity extends AppCompatActivity {
 
         String data_formatee[] = data.split(" ");
 
-        EditText batiment = findViewById(R.id.editText_batiment);
+        //EditText batiment = findViewById(R.id.editText_batiment);
         EditText numero = findViewById(R.id.editText_numero);
 
         tableau = findViewById(R.id.Tableau);
@@ -230,4 +239,15 @@ public class Option_activity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        batimentText = parent.getItemAtPosition(position).toString();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        batimentText = "";
+    }
 }
