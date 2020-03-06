@@ -267,13 +267,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void lecture_archive(View v) throws IOException {
+    public void lecture_archive(View v)  {
 
         CFichier classFichier = new CFichier(getApplicationContext(),"Archive.txt");
 
         TextView text_archive =  findViewById(R.id.textView_Archive);
 
-        text_archive.setText(classFichier.LireFichier());
+        try {
+            text_archive.setText(classFichier.LireFichier());
+        } catch (IOException e) {
+            Toast.makeText(this,"Archive vide !",Toast.LENGTH_SHORT).show();
+        }
 
 
     }
