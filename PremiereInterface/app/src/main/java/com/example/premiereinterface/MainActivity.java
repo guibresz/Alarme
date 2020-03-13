@@ -48,12 +48,14 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //tous les boutons//
     Button bouton_intrusion =  null;
     Button bouton_incendie =  null;
     Button bouton_confinement =  null;
     Button bouton_option =  null;
 
 
+    //tab de l'interface//
     TabHost th = null;
 
     String fichier = "liste_a_contacter.txt";
@@ -61,18 +63,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     View view = null;
     View bouton_appuye = null;
 
-    CSMS envoieDeSms;
 
+    CSMS envoieDeSms;
     MySmsReceiver receptionSMS = null;
 
-
-
     private static final int PERMISSION_SEND_SMS = 123;
-    private static final String TAG = MySmsReceiver.class.getSimpleName();
-    public static final String pdu_type = "pdus";
 
-    private BroadcastReceiver listener = null;
-
+    private BroadcastReceiver listener = null; //listener reception sms
 
 
 
@@ -92,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, 1); //autorisation reception de sms
 
 
+        //instanciation des classe//
         envoieDeSms = new CSMS();
         receptionSMS = new MySmsReceiver();
 
@@ -101,10 +99,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         try {
 
-
+            //instanciation des boutons avec les evennement//
             CreationBouttonEtEvennement();
-            creationTab();
 
+            //je pense que c'est clair//
+            creationTab();
 
 
         } catch (IOException e) {
@@ -148,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v) {   //evennement lorsqu'on l'on veut déclencher une sirène
 
         bouton_appuye = v;
 
@@ -161,24 +160,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch(bouton_appuye.getId())
                 {
                     case R.id.button_intrusion:
-                        //  view.setBackgroundColor(Color.RED);
-                        LireNumeroAContacter("Alerte intrusion");
-                        receptionSMS.onReceive(getApplicationContext(), getIntent());
 
+                        LireNumeroAContacter("Alerte intrusion"); //Lire tous les numéros de la liste et les contactes
                         break;
 
                     case R.id.button_incendie:
-                        // view.setBackgroundColor(Color.BLUE);
-                        LireNumeroAContacter("Alerte incendie");
-                        receptionSMS.onReceive(getApplicationContext(), getIntent());
-
+                        LireNumeroAContacter("Alerte incendie");//Lire tous les numéros de la liste et les contactes
                         break;
 
                     case R.id.button_confinement:
-                        //view.setBackgroundColor(Color.GREEN);
-                        LireNumeroAContacter("Alerte confinement");
-                        receptionSMS.onReceive(getApplicationContext(), getIntent());
-
+                        LireNumeroAContacter("Alerte confinement");//Lire tous les numéros de la liste et les contactes
                         break;
 
 
@@ -228,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-    }
+    } //instancie et ajoute les evennement aux boutons
 
 
     public void LireNumeroAContacter(String Message){
@@ -236,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             CFichier file = new CFichier(getApplicationContext(), "Archive.txt");
 
-            String[] data_formatee = new String[2];
+            String[] data_formatee = new String[3];
 
             // Open stream to read file.
             FileInputStream in = this.openFileInput(fichier);
@@ -248,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             while((s= br.readLine())!= null)  {
                 sb.append(s).append("\n");
 
-                data_formatee = s.split(" "); // sépare le batiment du numero
+                data_formatee = s.split("-"); // sépare le batiment du numero
 
                 envoieDeSms.EnvoieSMS( data_formatee[1] ,Message);
 
@@ -264,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-    }
+    } //lis tous les numéros et appelle la methode qui les contacte
 
 
     public void lecture_archive(View v)  {
@@ -283,10 +274,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void choix_heure_et_date(View v){
+    public void choix_heure_et_date(View v){ //evennement lorsqu'on choisit une heure et une date dans la tab Test
 
 
-        if(v.getId() == R.id.button_choix_date){
+        if(v.getId() == R.id.button_choix_date){  //si c'est l'onglet Calendar
 
             // Get Current Date
             final Calendar c = Calendar.getInstance();
@@ -305,9 +296,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                             Button choixDate = findViewById(R.id.button_choix_date);
-                            choixDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            choixDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year); //ecrit la date selectionné dans le textView
 
-                            Button choixHeure = findViewById(R.id.button_choix_heure);
+                            Button choixHeure = findViewById(R.id.button_choix_heure); //autorise la selection de l'heure
                             choixHeure.setEnabled(true);
 
 
@@ -318,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
-        if(v.getId() == R.id.button_choix_heure){
+        if(v.getId() == R.id.button_choix_heure){  //si c'est l'onglet clock
 
             // Get Current Time
             final Calendar c = Calendar.getInstance();
@@ -334,10 +325,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                               int minute) {
 
                             Button choixHeure = findViewById(R.id.button_choix_heure);
-                            choixHeure.setText(hourOfDay + ":" + minute);
+                            choixHeure.setText(hourOfDay + ":" + minute);  //ecrit l'heure selectionnée dans le textView
 
 
-                            Button valider = findViewById(R.id.button_valider_test);
+                            Button valider = findViewById(R.id.button_valider_test); //autorise la validation
                             valider.setEnabled(true);
 
                         }
@@ -349,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void test_valider(View v){
+    public void test_valider(View v){ //quand on valide le test
 
         Button choixHeure = findViewById(R.id.button_choix_heure);
         Button choixDate = findViewById(R.id.button_choix_date);
@@ -365,13 +356,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toast.makeText(getApplicationContext(), "Test sauvegardé !", Toast.LENGTH_LONG).show();
 
 
-        choixHeure.setEnabled(false);
+        //remet les texte d'origine//
 
+        choixHeure.setEnabled(false);
 
         choixDate.setText("Choisir Date");
         choixHeure.setText("Choisir Heure");
-
-
 
         Button valider = findViewById(R.id.button_valider_test);
         valider.setEnabled(false);
@@ -383,29 +373,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void creationTab() throws IOException {
+    public void creationTab() throws IOException { //creation de la tab
         th = findViewById(R.id.TabHost);
 
 
         //AJOUTE LA TAB//
         th.setup();
 
+        //crée l'onglet déclenchement//
         TabHost.TabSpec specs = th.newTabSpec("Tag1");
         specs.setContent(R.id.declenchement);
         specs.setIndicator("Declenchement");
         th.addTab(specs);
 
+        //crée l'onglet test//
         specs = th.newTabSpec("Tag2");
         specs.setContent(R.id.Test);
         specs.setIndicator("Test");
         th.addTab(specs);
 
+        //crée l'onglet archive//
         specs = th.newTabSpec("Tag3");
         specs.setContent(R.id.Archive);
         specs.setIndicator("Archive");
         th.addTab(specs);
 
 
+        //crée l'onglet etat//
         specs = th.newTabSpec("Tag4");
         specs.setContent(R.id.Etat);
         specs.setIndicator("Etat");
@@ -416,51 +410,65 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ////cree une ligne dans la Tab Etat pour chaque batiment///
 
-        CFichier classfichier = new CFichier(getApplicationContext(),"liste_a_contacter.txt");
+        CFichier classfichier = new CFichier(getApplicationContext(), "liste_a_contacter.txt");
+
 
         String data = classfichier.LireFichier(); //recupere toutes les lignes des batiment plus leur numero
-        String[] ListBatimentavecNumero = data.split("\n"); //sépare chaque ligne
-        String[][]ListBatimentNumerosplit = new String[ListBatimentavecNumero.length][2]; //List des numeros et des batiments pour chaque ligne séparés
-        String[] BatimentEtNumero = new String[2]; //String
 
-        for(int i = 0; i < ListBatimentavecNumero.length; i++){
+        if (data.equals("")) {
 
-            BatimentEtNumero = ListBatimentavecNumero[i].split(" ");
 
-            ListBatimentNumerosplit[i][0] = BatimentEtNumero[0];
-            ListBatimentNumerosplit[i][1] = BatimentEtNumero[1];
+            Toast.makeText(MainActivity.this, "Pas de numéro", Toast.LENGTH_SHORT).show();
 
         }
 
 
-        for(int i = 0; i < ListBatimentavecNumero.length; i++ ){
+        else {
 
-            AjoutBatimentDansEtat(ListBatimentNumerosplit[i][0],  ListBatimentNumerosplit[i][1]); //cree une ligne dans la Tab Etat pour chaque batiment
+
+
+
+            String[] ListBatimentavecNumero = data.split("\n"); //sépare chaque ligne
+            String[] BatimentEtNumeroetNom = new String[3]; //String
+
+
+            //recupere les données de chaque ligne//
+            for (int i = 0; i < ListBatimentavecNumero.length; i++) {
+
+                BatimentEtNumeroetNom = ListBatimentavecNumero[i].split("-");
+
+                //batiment                  numero                      nom     //
+                AjoutBatimentDansEtat(BatimentEtNumeroetNom[0], BatimentEtNumeroetNom[1], BatimentEtNumeroetNom[2]); //cree une ligne dans la Tab Etat pour chaque batiment
+
+
+            }
+
 
         }
-
-
 
     }
 
-    public void AjoutBatimentDansEtat(String batiment, final String numero){
+    public void AjoutBatimentDansEtat(String batiment, final String numero, String nomBatiment){ //génère les lignes dans etat selon les numeros dans la liste
 
 
         //MODIFIE la tab Etat//
+        //les texte view a ajouter
         TextView TextBatiment = new TextView(this);
         TextView TextNumero = new TextView(this);
         TextView TextEtat = new TextView(this);
+        TextView TextNomBatiment = new TextView(this);
+
+        //le bouton a la fin de chaque ligne
         Button boutonPing = new Button(this);
         ImageView logoEcole = new ImageView(this);
         LinearLayout lineaLayoutHorizontal = new LinearLayout(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 100, 1);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 100, 1);//parametre qu'il va prendre
 
-        LinearLayout layout = (LinearLayout)findViewById(R.id.Etat);
-
-
-        lineaLayoutHorizontal.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout layout = findViewById(R.id.Etat);
+        lineaLayoutHorizontal.setOrientation(LinearLayout.HORIZONTAL); //force le linear en horizontal
 
 
+        //met un logo au debut selon le type de batiment//
         if(batiment.equals("Ecole")){
             logoEcole.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.ecole));
         }
@@ -473,7 +481,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             logoEcole.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.mairie));
         }
 
-        Toast.makeText(this, "batiment:" + batiment +":", Toast.LENGTH_SHORT).show();
+        if(batiment.equals("Direction")){
+            logoEcole.setImageBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.direction));
+        }
+
 
 
         logoEcole.setLayoutParams(params);
@@ -484,6 +495,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextBatiment.setTextSize(20);
         TextBatiment.setLayoutParams(params);
         lineaLayoutHorizontal.addView(TextBatiment);
+
+
+
+        TextNomBatiment.setText("Nom : " + nomBatiment ); //ajoute du text dans le linear layout
+        TextNomBatiment.setTextSize(20);
+        TextNomBatiment.setLayoutParams(params);
+        lineaLayoutHorizontal.addView(TextNomBatiment);
+
 
 
         TextNumero.setText("Numero : " + numero ); //ajoute du text dans le linear layout

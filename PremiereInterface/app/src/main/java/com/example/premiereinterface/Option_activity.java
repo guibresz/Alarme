@@ -89,9 +89,19 @@ public class Option_activity extends AppCompatActivity  implements AdapterView.O
 
 
                 EditText numero = findViewById(R.id.editText_numero);
+                EditText text_nom_batiment = findViewById(R.id.editText_Nom_Batiment);
 
+                if(text_nom_batiment.isEnabled()){
 
-                if( (batimentText.length() != 0) && (numero.getText().length() != 0) ){
+                    if( (batimentText.length() != 0) && (numero.getText().toString().length() == 10) && (text_nom_batiment.getText().toString().length() != 0)  ){
+
+                        NouvelleLigne();
+
+                    }
+
+                }
+
+                if( (text_nom_batiment.isEnabled() == false)  && (batimentText.length() != 0) && (numero.getText().toString().length() == 10) ){
                     NouvelleLigne();
                 }
 
@@ -105,21 +115,57 @@ public class Option_activity extends AppCompatActivity  implements AdapterView.O
         });
 
         bouton_effacer = findViewById(R.id.button_affacer);
-        bouton_effacer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        bouton_effacer.setText("effacer les numéros");
 
-
-                EffacerFichier();
-            }
-        });
 
 
     }
 
-    public void sauvegarder(String batiment_string, String numero_string) throws IOException {
+    public void onClickSupprimer(View v){
 
-        String data = new String(batiment_string + " " + numero_string + "\n") ;
+        switch (bouton_effacer.getText().toString()){
+
+            case "effacer les numéros":
+                bouton_effacer.setText("êtes vous sûr ?");
+                break;
+
+            case "êtes vous sûr ?":
+                bouton_effacer.setText("vraiment ?");
+                break;
+
+            case "vraiment ?":
+                bouton_effacer.setText("encore une fois");
+                break;
+
+            case "encore une fois":
+                bouton_effacer.setText("effacer les numéros");
+                EffacerFichier();
+                Toast.makeText(getApplicationContext(),"tous les numéros ont été supprimés",Toast.LENGTH_SHORT).show();
+                finish();
+                startActivity(getIntent());
+                break;
+
+        }
+
+    }
+
+    public void sauvegarder(String batiment_string, String numero_string, String nom_batiment) throws IOException {
+
+
+        EditText text_nom_batiment = findViewById(R.id.editText_Nom_Batiment);
+        String data;
+
+
+        if(text_nom_batiment.isEnabled()){
+            data = new String(batiment_string + "-" + numero_string + "-" + nom_batiment + "\n") ;
+        }
+        else
+        {
+            data = new String(batiment_string + "-" + numero_string + "-Aucun"  + "\n") ;
+        }
+
+
+
 
 
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getApplicationContext().openFileOutput(fichier, Context.MODE_APPEND));
@@ -159,6 +205,7 @@ public class Option_activity extends AppCompatActivity  implements AdapterView.O
 
         //EditText batiment = findViewById(R.id.editText_batiment);
         EditText numero = findViewById(R.id.editText_numero);
+        EditText nomBatiment = findViewById(R.id.editText_Nom_Batiment);
 
         tableau = findViewById(R.id.Tableau);
 
@@ -178,14 +225,49 @@ public class Option_activity extends AppCompatActivity  implements AdapterView.O
         texte2.setLayoutParams(findViewById(R.id.texte_batiment).getLayoutParams());
 
 
+
+        TextView texte3 = new TextView(getApplicationContext());
+        texte3.setText(nomBatiment.getText());
+        texte3.setGravity(Gravity.CENTER);
+        texte3.setLayoutParams(findViewById(R.id.texte_batiment).getLayoutParams());
+
+
+        Button supprimer_num = new Button(getApplicationContext());
+        supprimer_num.setText("X");
+        supprimer_num.setGravity(Gravity.CENTER);
+        supprimer_num.setTag(numero.getText());
+        supprimer_num.setLayoutParams(findViewById(R.id.texte_batiment).getLayoutParams());
+        supprimer_num.setOnClickListener(new View.OnClickListener() { //evennement pour le clic
+            @Override
+            public void onClick(View v) {
+
+                CFichier file = new CFichier(getApplicationContext(),fichier);
+
+                file.deleteNumero(v.getTag().toString());
+
+
+                finish(); //recharge la page
+                startActivity(getIntent());
+
+            }
+        });
+
+
+
+
+
         ligne.addView(texte1);
+        ligne.addView(texte3);
         ligne.addView(texte2);
+        ligne.addView(supprimer_num);
+
         tableau.addView(ligne);
 
 
         try {
-            sauvegarder(batimentText, numero.getText().toString());
+            sauvegarder(batimentText, numero.getText().toString(), nomBatiment.getText().toString());
             numero.setText("");
+            nomBatiment.setText("");
             Toast.makeText(getApplicationContext(), "Ajouté!", Toast.LENGTH_SHORT).show();
 
 
@@ -201,10 +283,11 @@ public class Option_activity extends AppCompatActivity  implements AdapterView.O
 
     public void NouvelleLigneApresLecture(String data){
 
-        String data_formatee[] = data.split(" ");
+        String data_formatee[] = data.split("-");
 
         //EditText batiment = findViewById(R.id.editText_batiment);
         EditText numero = findViewById(R.id.editText_numero);
+        EditText nom = findViewById(R.id.editText_Nom_Batiment);
 
         tableau = findViewById(R.id.Tableau);
 
@@ -224,8 +307,37 @@ public class Option_activity extends AppCompatActivity  implements AdapterView.O
         texte2.setLayoutParams(findViewById(R.id.texte_batiment).getLayoutParams());
 
 
+        TextView texte3 = new TextView(getApplicationContext());
+        texte3.setText( data_formatee[2]  );
+        texte3.setGravity(Gravity.CENTER);
+        texte3.setLayoutParams(findViewById(R.id.texte_batiment).getLayoutParams());
+
+
+        Button supprimer_num = new Button(getApplicationContext());
+        supprimer_num.setText("X");
+        supprimer_num.setGravity(Gravity.CENTER);
+        supprimer_num.setTag(data_formatee[1]);
+        supprimer_num.setLayoutParams(findViewById(R.id.texte_batiment).getLayoutParams());
+        supprimer_num.setOnClickListener(new View.OnClickListener() { //evennement pour le clic
+            @Override
+            public void onClick(View v) {
+
+                CFichier file = new CFichier(getApplicationContext(),fichier);
+                file.deleteNumero(v.getTag().toString());
+
+
+                finish(); //recharge la page
+                startActivity(getIntent());
+
+            }
+        });
+
+
+
         ligne.addView(texte1);
+        ligne.addView(texte3);
         ligne.addView(texte2);
+        ligne.addView(supprimer_num);
         tableau.addView(ligne);
 
 
@@ -243,6 +355,16 @@ public class Option_activity extends AppCompatActivity  implements AdapterView.O
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         batimentText = parent.getItemAtPosition(position).toString();
+        EditText text_nom_batiment = findViewById(R.id.editText_Nom_Batiment);
+
+        if(batimentText.equals("Ecole")){
+
+            text_nom_batiment.setEnabled(true);
+        }
+
+        else{
+            text_nom_batiment.setEnabled(false);
+        }
 
     }
 

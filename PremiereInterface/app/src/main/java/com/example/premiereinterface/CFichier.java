@@ -1,6 +1,8 @@
 package com.example.premiereinterface;
 
 import android.content.Context;
+import android.widget.Toast;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,8 +31,8 @@ public class CFichier {
     public void sauvegarder(String data) throws IOException {
 
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fichier, Context.MODE_APPEND));
-        outputStreamWriter.write("\n");
         outputStreamWriter.write(data);
+        outputStreamWriter.write("\n");
         outputStreamWriter.close();
 
 
@@ -158,6 +160,58 @@ public class CFichier {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+    }
+
+
+    public void deleteNumero(String numero){
+
+        String data = ""; //anciens numeros
+        String newData = ""; //même numeros mais sans le numéro à supprimer
+
+        try {
+
+            data = LireFichier();
+            EffacerFichier();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        String[] ListBatimentavecNumero = data.split("\n"); //sépare chaque ligne
+        String[] BatimentEtNumeroetNom = new String[3]; //String
+
+
+        //recupere les données de chaque ligne//
+        for(int i = 0; i < ListBatimentavecNumero.length; i++){
+
+            BatimentEtNumeroetNom = ListBatimentavecNumero[i].split("-");
+
+            if(BatimentEtNumeroetNom[1].equals(numero)){ //si c'est le numero qu'on veut supprimer
+
+                //on ne le recopie pas
+            }
+
+            else //sinon
+            {
+                newData = BatimentEtNumeroetNom[0] + "-" + BatimentEtNumeroetNom[1] + "-" + BatimentEtNumeroetNom[2]; //on le recopie
+                try {
+
+                    sauvegarder(newData);
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+        }
+
 
 
     }
