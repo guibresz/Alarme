@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //tab de l'interface//
     TabHost th = null;
 
-    String fichier = "liste_a_contacter.txt";
+    String fichier = "liste_a_contacter.txt"; //les numéros de telephone
+    String fichierUtilisateur = "User.txt"; //fichier où se trouve si l'utilisateur est admin ou non
 
     View view = null;
     View bouton_appuye = null;
@@ -102,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //instanciation des boutons avec les evennement//
             CreationBouttonEtEvennement();
 
+
+            checkUser();
+
             //je pense que c'est clair//
             creationTab();
 
@@ -136,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         };
+
 
 
 
@@ -191,6 +196,77 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         message_confirmation.create().show();
 
+
+
+    }
+
+    public void checkUser()  {  //si l'utilisateur n'a pas été enregistré on propose le compte admin (1) ou prof (1)
+
+        CFichier file = new CFichier(getApplicationContext(), fichierUtilisateur);
+
+        String data = null;
+
+
+        try {
+            data = file.LireFichier();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        if (data != null ) {}
+
+        else{
+
+            AlertDialog.Builder message_confirmation = new AlertDialog.Builder(this);
+            message_confirmation.setMessage("êtes vous administrateur ou professeur ?");
+            message_confirmation.setCancelable(false);
+            message_confirmation.setPositiveButton("administrateur", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+
+                    CFichier file = new CFichier(getApplicationContext(), fichierUtilisateur);
+                    try {
+
+                        file.sauvegarder("1");
+
+                        finish();
+                        startActivity(getIntent());
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+            message_confirmation.setNegativeButton("professeur", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    CFichier file = new CFichier(getApplicationContext(), fichierUtilisateur);
+                    try {
+
+                        file.sauvegarder("0");
+
+                        finish();
+                        startActivity(getIntent());
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+            message_confirmation.create().show();
+
+
+
+        }
 
 
     }
@@ -376,6 +452,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void creationTab() throws IOException { //creation de la tab
         th = findViewById(R.id.TabHost);
 
+        CFichier file = new CFichier(getApplicationContext(), fichierUtilisateur); //verifier si admin ou prof
+        String data = null;
+        data = file.LireFichier();
+
 
         //AJOUTE LA TAB//
         th.setup();
@@ -386,11 +466,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         specs.setIndicator("Declenchement");
         th.addTab(specs);
 
+
         //crée l'onglet test//
         specs = th.newTabSpec("Tag2");
         specs.setContent(R.id.Test);
         specs.setIndicator("Test");
-        th.addTab(specs);
+
+        if(data.equals("1\n")){
+            th.addTab(specs);
+        }
+
+
+
 
         //crée l'onglet archive//
         specs = th.newTabSpec("Tag3");
@@ -413,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         CFichier classfichier = new CFichier(getApplicationContext(), "liste_a_contacter.txt");
 
 
-        String data = classfichier.LireFichier(); //recupere toutes les lignes des batiment plus leur numero
+        data = classfichier.LireFichier(); //recupere toutes les lignes des batiment plus leur numero
 
         if (data.equals("")) {
 
